@@ -43,11 +43,24 @@
             justify-content: center;
         }
 
+        /* ==========================================
+           کلاس سراسری برای همزمانی لود محتوا با بک‌گراند
+           ========================================== */
+        .page-content {
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+
+        .page-content.show-now {
+            opacity: 1;
+        }
+
         /* ------------------------------------------
            ۱. استایل صفحه ورود (Password Page)
            ------------------------------------------ */
         #login-page {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('pic1.jpg'); 
+            background-color: #1a0b2e;
             text-align: center;
         }
 
@@ -108,15 +121,15 @@
            ------------------------------------------ */
         #scene-page-1 {
             background-image: url('pic2.jpg'); 
-            background-color: #2a1b40; /* رنگ پس‌زمینه پشتیبان */
+            background-color: #2a1b40;
         }
 
         #scene-page-2 {
             background-image: url('pic3.jpg'); 
-            background-color: #2a1b40; /* رنگ پس‌زمینه پشتیبان */
+            background-color: #2a1b40;
         }
 
-        /* کادر روی تابلوی دست گربه - تنظیم دقیق برای قرارگیری متن و آیکون‌ها */
+        /* کادر روی تابلوی دست گربه */
         .board-overlay {
             position: absolute;
             bottom: 15%;
@@ -136,23 +149,15 @@
             font-size: 12px;
             line-height: 1.3;
             pointer-events: auto;
-            /* کادر در ابتدا مخفی - بعد از لود شدن عکس با جاوااسکریپت نمایان می‌شه */
-            opacity: 0;
-            transition: opacity 0.3s ease-in;
-        }
-
-        /* کلاسی که با جاوااسکریپت اضافه می‌شه و کادر رو نمایان می‌کنه */
-        .board-overlay.show-now {
-            opacity: 1;
         }
 
         /* تنظیمات اختصاصی برای صفحه دوم (pic3) */
         #scene-page-2 .board-overlay {
-            width: 45%;           /* عرض کمتر برای شکستن زودتر متن */
-            max-width: 240px;     /* حداکثر عرض */
-            bottom: 8%;           /* بردن پایین‌تر طبق درخواست */
-            height: 24%;          /* ارتفاع کادر */
-            font-size: 10px;      /* سایز فونت کوچک‌تر */
+            width: 45%;
+            max-width: 240px;
+            bottom: 8%;
+            height: 24%;
+            font-size: 10px;
             padding: 8px 5px;
             line-height: 1.2;
         }
@@ -189,7 +194,6 @@
             justify-content: center;
         }
 
-        /* تنظیمات اختصاصی آیکون‌ها برای صفحه دوم (pic3) */
         #scene-page-2 .icons-row {
             gap: 10px;
             margin-top: 4px;
@@ -265,12 +269,12 @@
             justify-content: flex-start;
         }
 
-        /* پس‌زمینه‌های اختصاصی برای صفحات درباره من و نامه */
         #about-page {
             background-image: url('pic8.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-color: #2a1b40;
         }
 
         #letter-page {
@@ -278,6 +282,7 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-color: #2a1b40;
         }
 
         .card-container {
@@ -370,7 +375,7 @@
          ۱. صفحه ورود (LOGIN)
          ========================================== -->
     <div id="login-page" class="page active">
-        <div class="login-card">
+        <div class="login-card page-content">
             <h1>Welcome Melika! ✨</h1>
             <input type="password" id="pass-input" placeholder="Enter the password...">
             <button onclick="checkPassword()">Unlock</button>
@@ -382,7 +387,7 @@
          ۲. صفحه گربه ۱ (آشنایی)
          ========================================== -->
     <div id="scene-page-1" class="page">
-        <div class="board-overlay">
+        <div class="board-overlay page-content">
             <p>Hi Melika! I'm Ginger and I'm so happy to meet you! 🐾<br>I have a surprise for you, click on the gift if you'd like to see it!</p>
             <div class="gift-btn" onclick="goToPage('scene-page-2')">🎁</div>
         </div>
@@ -392,7 +397,7 @@
          ۳. صفحه گربه ۲ (منوی آیکون‌ها)
          ========================================== -->
     <div id="scene-page-2" class="page">
-        <div class="board-overlay">
+        <div class="board-overlay page-content">
             <p>I hope you liked it! But I'm not done with you yet 😉<br>Pick one of the icons below:</p>
             <div class="icons-row">
                 <span class="icon-btn" onclick="openModal('modal-yarn')">🧶</span>
@@ -405,7 +410,6 @@
     <!-- ==========================================
          ۴. مودال‌ها (پاپ‌آپ‌ها)
          ========================================== -->
-    <!-- پاپ‌آپ کاموا -->
     <div id="modal-yarn" class="modal">
         <div class="modal-content">
             <p>This part is about me! Would you like to know more about me? 🐾</p>
@@ -416,7 +420,6 @@
         </div>
     </div>
 
-    <!-- پاپ‌آپ نامه -->
     <div id="modal-letter" class="modal">
         <div class="modal-content">
             <p>Psst... 🐾<br>Someone asked me to give you a message.<br>Want to see it?</p>
@@ -427,7 +430,6 @@
         </div>
     </div>
 
-    <!-- پاپ‌آپ موزیک -->
     <div id="modal-music" class="modal">
         <div class="modal-content">
             <p>Would you like me to play the Happy Birthday song for you? 🎵<br><small style="color: #777;">(Click the music icon again to stop it anytime)</small></p>
@@ -442,7 +444,7 @@
          ۵. صفحه درباره گربه (ABOUT ME)
          ========================================== -->
     <div id="about-page" class="page full-page">
-        <div class="card-container">
+        <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
             <h2>All About Ginger! 🐱</h2>
             <p style="margin: 15px 0; font-size: 14px; line-height: 1.5;">
@@ -463,25 +465,22 @@
          ۶. صفحه نامه و پیام دلخواه (LETTER PAGE)
          ========================================== -->
     <div id="letter-page" class="page full-page">
-        <div class="card-container">
+        <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
             <h2>A Special Message 💌</h2>
             
-            <!-- متن دلخواه خود را در کادر زیر بنویسید -->
             <div class="letter-text">
                 [متن دلخواه و پیام آشتی یا تولد شما در اینجا قرار می‌گیرد. این بخش آماده نوشته‌های قشنگ شماست!]
             </div>
 
             <div class="media-section">
                 <h3>Listen to this 🎙️</h3>
-                <!-- لینک وویس خود را در src قرار دهید -->
                 <audio controls>
                     <source src="audio1.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
 
                 <h3>Our Memories 📸</h3>
-                <!-- لینک عکس دو نفره را در src قرار دهید -->
                 <img src="pic7.jpg" class="couple-img" alt="Together">
             </div>
         </div>
@@ -495,28 +494,41 @@
          ========================================== -->
     <script>
         // ----------------------------------------
-        // پیش‌بارگذاری عکس پس‌زمینه و نمایش همزمان متن‌ها با عکس
+        // پیش‌بارگذاری بک‌گراند همه صفحات و نمایش همزمان محتوا با عکس
         // ----------------------------------------
-        function showOverlayWhenBgLoaded(bgUrl, overlaySelector) {
-            const img = new Image();
-            img.onload = function() {
-                // عکس لود شد → کادر (متن + آیکون‌ها) رو فوراً نشون بده
-                const overlay = document.querySelector(overlaySelector);
-                if (overlay) overlay.classList.add('show-now');
-            };
-            img.onerror = function() {
-                // اگه عکس لود نشد، بازم کادر رو نشون بده که کاربر معطل نمونه
-                const overlay = document.querySelector(overlaySelector);
-                if (overlay) overlay.classList.add('show-now');
-            };
-            img.src = bgUrl;
+        const pageBackgrounds = {
+            'login-page':    'pic1.jpg',
+            'scene-page-1':  'pic2.jpg',
+            'scene-page-2':  'pic3.jpg',
+            'about-page':    'pic8.jpg',
+            'letter-page':   'pic9.jpg'
+        };
+
+        function preloadAllBackgrounds() {
+            Object.entries(pageBackgrounds).forEach(function(entry) {
+                const pageId = entry[0];
+                const bgUrl = entry[1];
+
+                const img = new Image();
+
+                const showContent = function() {
+                    const page = document.getElementById(pageId);
+                    if (page) {
+                        const content = page.querySelector('.page-content');
+                        if (content) content.classList.add('show-now');
+                    }
+                };
+
+                // اگه عکس لود شد یا خطا داد، محتوا رو نمایش بده
+                img.onload = showContent;
+                img.onerror = showContent;
+
+                img.src = bgUrl;
+            });
         }
 
-        // وقتی صفحه کامل لود شد، پیش‌بارگذاری عکس‌ها رو شروع کن
-        window.addEventListener('load', function() {
-            showOverlayWhenBgLoaded('pic2.jpg', '#scene-page-1 .board-overlay');
-            showOverlayWhenBgLoaded('pic3.jpg', '#scene-page-2 .board-overlay');
-        });
+        // به محض لود شدن ساختار صفحه، پیش‌بارگذاری شروع می‌شه
+        window.addEventListener('load', preloadAllBackgrounds);
 
         // ----------------------------------------
         // بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
