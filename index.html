@@ -108,10 +108,12 @@
            ------------------------------------------ */
         #scene-page-1 {
             background-image: url('pic2.jpg'); 
+            background-color: #2a1b40; /* رنگ پس‌زمینه پشتیبان */
         }
 
         #scene-page-2 {
             background-image: url('pic3.jpg'); 
+            background-color: #2a1b40; /* رنگ پس‌زمینه پشتیبان */
         }
 
         /* کادر روی تابلوی دست گربه - تنظیم دقیق برای قرارگیری متن و آیکون‌ها */
@@ -134,15 +136,23 @@
             font-size: 12px;
             line-height: 1.3;
             pointer-events: auto;
+            /* کادر در ابتدا مخفی - بعد از لود شدن عکس با جاوااسکریپت نمایان می‌شه */
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+
+        /* کلاسی که با جاوااسکریپت اضافه می‌شه و کادر رو نمایان می‌کنه */
+        .board-overlay.show-now {
+            opacity: 1;
         }
 
         /* تنظیمات اختصاصی برای صفحه دوم (pic3) */
         #scene-page-2 .board-overlay {
-            width: 45%; /* قبلاً 60% بود - کمترش کن تا متن زودتر بشکنه */
-    max-width: 240px; /* قبلاً 340px بود */        
-            bottom: 8%; /* متن پایین‌تر بیاید */
-            height: 24%; /* ارتفاع کمی کوتاه‌تر */
-            font-size: 10px; /* فونت کوچک‌تر */
+            width: 45%;           /* عرض کمتر برای شکستن زودتر متن */
+            max-width: 240px;     /* حداکثر عرض */
+            bottom: 8%;           /* بردن پایین‌تر طبق درخواست */
+            height: 24%;          /* ارتفاع کادر */
+            font-size: 10px;      /* سایز فونت کوچک‌تر */
             padding: 8px 5px;
             line-height: 1.2;
         }
@@ -484,7 +494,33 @@
          کدهای منطقی وب‌سایت (JAVASCRIPT)
          ========================================== -->
     <script>
+        // ----------------------------------------
+        // پیش‌بارگذاری عکس پس‌زمینه و نمایش همزمان متن‌ها با عکس
+        // ----------------------------------------
+        function showOverlayWhenBgLoaded(bgUrl, overlaySelector) {
+            const img = new Image();
+            img.onload = function() {
+                // عکس لود شد → کادر (متن + آیکون‌ها) رو فوراً نشون بده
+                const overlay = document.querySelector(overlaySelector);
+                if (overlay) overlay.classList.add('show-now');
+            };
+            img.onerror = function() {
+                // اگه عکس لود نشد، بازم کادر رو نشون بده که کاربر معطل نمونه
+                const overlay = document.querySelector(overlaySelector);
+                if (overlay) overlay.classList.add('show-now');
+            };
+            img.src = bgUrl;
+        }
+
+        // وقتی صفحه کامل لود شد، پیش‌بارگذاری عکس‌ها رو شروع کن
+        window.addEventListener('load', function() {
+            showOverlayWhenBgLoaded('pic2.jpg', '#scene-page-1 .board-overlay');
+            showOverlayWhenBgLoaded('pic3.jpg', '#scene-page-2 .board-overlay');
+        });
+
+        // ----------------------------------------
         // بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
+        // ----------------------------------------
         function checkPassword() {
             const input = document.getElementById('pass-input').value.trim().toLowerCase();
             const correctPass = "some_things_stay";
@@ -498,7 +534,9 @@
             }
         }
 
+        // ----------------------------------------
         // تغییر صفحه‌ها
+        // ----------------------------------------
         function goToPage(pageId) {
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -506,7 +544,9 @@
             document.getElementById(pageId).classList.add('active');
         }
 
+        // ----------------------------------------
         // مدیریت مودال‌ها (پاپ‌آپ‌ها)
+        // ----------------------------------------
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
         }
@@ -515,7 +555,9 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
+        // ----------------------------------------
         // مدیریت پخش موزیک
+        // ----------------------------------------
         const music = document.getElementById('bg-music');
 
         function handleMusicClick() {
