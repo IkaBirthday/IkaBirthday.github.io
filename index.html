@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Melika!</title>
+    <style>
+        /* ==========================================
+           تنظیمات کلی و استایل‌ها (CSS)
+           ========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1a0b2e;
+            color: #fff;
+        }
+
+        /* بخش‌های مختلف وب‌سایت */
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ------------------------------------------
+           ۱. استایل صفحه ورود (Password Page)
+           ------------------------------------------ */
+        #login-page {
+            /* در کامنت زیر لینک پس‌زمینه صفحه ورود را بگذارید */
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('pic1.jpg'); 
+            text-align: center;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 90%;
+            width: 350px;
+        }
+
+        .login-card h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #f3e5f5;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            background: #ab47bc;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-card button:hover {
+            background: #8e24aa;
+        }
+
+        .error-msg {
+            color: #ff5252;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* ------------------------------------------
+           ۲. استایل صفحه‌های گربه (Cat Pages)
+           ------------------------------------------ */
+        #scene-page-1 {
+            /* لینک عکس اول (گربه روی میز با زمینه بنفش) */
+            background-image: url('pic2.jpg'); 
+        }
+
+        #scene-page-2 {
+            /* لینک عکس دوم (گربه با بادکنک‌ها) */
+            background-image: url('pic3.jpg'); 
+        }
+
+        /* کادر روی تابلوی دست گربه */
+        .board-overlay {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55%;
+            max-width: 320px;
+            height: 22%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 1.4;
+            pointer-events: auto;
+        }
+
+        .gift-btn {
+            font-size: 28px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.2s;
+            animation: bounce 1.5s infinite;
+        }
+
+        .gift-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* دکمه‌های ۳ گانه (نخ، نامه، موزیک) */
+        .icons-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .icon-btn {
+            font-size: 26px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.15);
+            background: #ffffff;
+        }
+
+        /* ------------------------------------------
+           ۳. استایل مودال‌ها (Popups)
+           ------------------------------------------ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            color: #333;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 85%;
+            width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .modal-content p {
+            font-size: 15px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .modal-btns {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-yes { background: #4caf50; color: white; }
+        .btn-no { background: #e0e0e0; color: #555; }
+
+        /* ------------------------------------------
+           ۴. صفحه‌های کامل (About Me & Letter)
+           ------------------------------------------ */
+        .full-page {
+            background: #2a1b40;
+            overflow-y: auto;
+            padding: 30px 20px;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .card-container {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* دکمه بازگشت شناور و جذاب */
+        .back-btn {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e91e63;
+            transform: translateY(-2px);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .letter-text {
+            line-height: 1.6;
+            font-size: 14px;
+            background: #fdf6e3;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff4081;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        .media-section {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .media-section audio {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .couple-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         ۱. صفحه ورود (LOGIN)
+         ========================================== -->
+    <div id="login-page" class="page active">
+        <div class="login-card">
+            <h1>Welcome Melika! ✨</h1>
+            <input type="password" id="pass-input" placeholder="Enter the password...">
+            <button onclick="checkPassword()">Unlock</button>
+            <div id="error-msg" class="error-msg">Incorrect. Try again!</div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ۲. صفحه گربه ۱ (آشنایی)
+         ========================================== -->
+    <div id="scene-page-1" class="page">
+        <div class="board-overlay">
+            <p>Hi Melika! I'm Ginger and I'm so happy to meet you! 🐾<br>I have a surprise for you, click on the gift if you'd like to see it!</p>
+            <div class="gift-btn" onclick="goToPage('scene-page-2')">🎁</div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ۳. صفحه گربه ۲ (منوی آیکون‌ها)
+         ========================================== -->
+    <div id="scene-page-2" class="page">
+        <div class="board-overlay">
+            <p>I hope you liked it! But I'm not done with you yet 😉<br>Pick one of the icons below:</p>
+            <div class="icons-row">
+                <span class="icon-btn" onclick="openModal('modal-yarn')">🧶</span>
+                <span class="icon-btn" onclick="openModal('modal-letter')">✉️</span>
+                <span class="icon-btn" onclick="handleMusicClick()">🎶</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ۴. مودال‌ها (پاپ‌آپ‌ها)
+         ========================================== -->
+    <!-- پاپ‌آپ کاموا -->
+    <div id="modal-yarn" class="modal">
+        <div class="modal-content">
+            <p>This part is about me! Would you like to know more about me? 🐾</p>
+            <div class="modal-btns">
+                <button class="modal-btn btn-yes" onclick="closeModal('modal-yarn'); goToPage('about-page');">Yes</button>
+                <button class="modal-btn btn-no" onclick="closeModal('modal-yarn')">Maybe later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ نامه -->
+    <div id="modal-letter" class="modal">
+        <div class="modal-content">
+            <p>Psst... 🐾<br>Someone asked me to give you a message.<br>Want to see it?</p>
+            <div class="modal-btns">
+                <button class="modal-btn btn-yes" onclick="closeModal('modal-letter'); goToPage('letter-page');">Yes</button>
+                <button class="modal-btn btn-no" onclick="closeModal('modal-letter')">Maybe later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ موزیک -->
+    <div id="modal-music" class="modal">
+        <div class="modal-content">
+            <p>Would you like me to play the Happy Birthday song for you? 🎵<br><small style="color: #777;">(Click the music icon again to stop it anytime)</small></p>
+            <div class="modal-btns">
+                <button class="modal-btn btn-yes" onclick="playMusic()">Yes</button>
+                <button class="modal-btn btn-no" onclick="closeModal('modal-music')">Maybe later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ۵. صفحه درباره گربه (ABOUT ME)
+         ========================================== -->
+    <div id="about-page" class="page full-page">
+        <div class="card-container">
+            <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
+            <h2>All About Ginger! 🐱</h2>
+            <p style="margin: 15px 0; font-size: 14px; line-height: 1.5;">
+                Hello! I'm <strong>Ginger</strong>, a soft and fluffy British Shorthair kitten! 
+                My favorite activities include sleeping on cozy desks, chasing mysterious red dots, 
+                and delivering special happy birthday messages to lovely humans like Melika! ✨
+            </p>
+            <h3>Ginger's Gallery 📸</h3>
+            <div class="gallery">
+                <!-- لینک عکس‌های گربه را در src زیر جای‌گذاری کنید -->
+                <img src="pic4.jpg" alt="Ginger 1">
+                <img src="pic5.jpg" alt="Ginger 2">
+                <img src="pic6.jpg" alt="Ginger 3">
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ۶. صفحه نامه و پیام دلخواه (LETTER PAGE)
+         ========================================== -->
+    <div id="letter-page" class="page full-page">
+        <div class="card-container">
+            <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
+            <h2>A Special Message 💌</h2>
+            
+            <!-- متن دلخواه خود را در کادر زیر بنویسید -->
+            <div class="letter-text">
+                [متن دلخواه و پیام آشتی یا تولد شما در اینجا قرار می‌گیرد. این بخش آماده نوشته‌های قشنگ شماست!]
+            </div>
+
+            <div class="media-section">
+                <h3>Listen to this 🎙️</h3>
+                <!-- لینک وویس خود را در src قرار دهید -->
+                <audio controls>
+                    <source src="audio1.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+
+                <h3>Our Memories 📸</h3>
+                <!-- لینک عکس دو نفره را در src قرار دهید -->
+                <img src="pic7.jpg" class="couple-img" alt="Together">
+            </div>
+        </div>
+    </div>
+
+    <!-- فایل صوتی موزیک تولد -->
+    <!-- لینک آهنگ تولد مبارک را در src زیر قرار دهید -->
+    <audio id="bg-music" src="audio2.mp3" loop></audio>
+
+    <!-- ==========================================
+         کدهای منطقی وب‌سایت (JAVASCRIPT)
+         ========================================== -->
+    <script>
+        // بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
+        function checkPassword() {
+            const input = document.getElementById('pass-input').value.trim().toLowerCase();
+            const correctPass = "some_things_stay";
+            const errorMsg = document.getElementById('error-msg');
+
+            if (input === correctPass) {
+                errorMsg.style.display = 'none';
+                goToPage('scene-page-1');
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // تغییر صفحه‌ها
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // مدیریت مودال‌ها (پاپ‌آپ‌ها)
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // مدیریت پخش موزیک
+        const music = document.getElementById('bg-music');
+
+        function handleMusicClick() {
+            if (!music.paused) {
+                // اگر آهنگ در حال پخش باشد، قطع می‌شود
+                music.pause();
+            } else {
+                // اگر پخش نمی‌شود، سوال می‌پرسد
+                openModal('modal-music');
+            }
+        }
+
+        function playMusic() {
+            music.play();
+            closeModal('modal-music');
+        }
+    </script>
+</body>
+</html>
