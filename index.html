@@ -269,11 +269,11 @@
             justify-content: flex-start;
         }
 
+        /* پس‌زمینه‌های اختصاصی برای صفحات درباره من و نامه */
         #about-page {
             background-image: url('pic8.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             background-color: #2a1b40;
         }
 
@@ -281,7 +281,6 @@
             background-image: url('pic9.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             background-color: #2a1b40;
         }
 
@@ -293,6 +292,7 @@
             max-width: 500px;
             width: 100%;
             margin-top: 40px;
+            margin-bottom: 50px; /* فاصله از پایین صفحه برای جلوگیری از خروج از بک‌گراند */
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
         }
@@ -342,6 +342,7 @@
             padding: 15px;
             border-radius: 10px;
             border-left: 4px solid #ff4081;
+            margin-top: 20px; /* فاصله بین تیتر Special Message و کادر متن */
             margin-bottom: 20px;
             white-space: pre-wrap;
         }
@@ -349,6 +350,11 @@
         .media-section {
             margin-top: 15px;
             text-align: center;
+        }
+
+        /* فاصله بین تیترهای Listen و Our Memories با محتوای زیرشون */
+        .media-section h3 {
+            margin-bottom: 15px; 
         }
 
         .media-section audio {
@@ -376,7 +382,7 @@
          ========================================== -->
     <div id="login-page" class="page active">
         <div class="login-card page-content">
-            <h1>Welcome Melika</h1>
+            <h1>Welcome Melika! ✨</h1>
             <input type="password" id="pass-input" placeholder="Enter the password...">
             <button onclick="checkPassword()">Unlock</button>
             <div id="error-msg" class="error-msg">Incorrect. Try again!</div>
@@ -449,7 +455,7 @@
             <h2>All About Ginger! 🐱</h2>
             <p style="margin: 15px 0; font-size: 14px; line-height: 1.5;">
                 Hello! I'm <strong>Ginger</strong>, a soft and fluffy British Shorthair kitten! 
-                My favorite activities include sleeping on cozy desks, chasing mysterious red dots, eating delicious treats
+                My favorite activities include sleeping on cozy desks, chasing mysterious red dots, 
                 and delivering special happy birthday messages to lovely humans like Melika! ✨
             </p>
             <h3>Ginger's Gallery 📸</h3>
@@ -457,7 +463,6 @@
                 <img src="pic4.jpg" alt="Ginger 1">
                 <img src="pic5.jpg" alt="Ginger 2">
                 <img src="pic6.jpg" alt="Ginger 3">
-                <img src="pic4.jpg" alt="Ginger 4">
             </div>
         </div>
     </div>
@@ -471,7 +476,7 @@
             <h2>A Special Message 💌</h2>
             
             <div class="letter-text">
-                سلام ملیکا امیدوارم حالت خوب باشه. تولدت مبارک امیدوارم سال خوبی رو پیش رو داشته باشی. مدت زیادیه که ارتباطی نداشتیم و گفتم شاید تولدت فرصت خوبی باشه تا بابت گذشته ازت معذرت بخوام. فقط دلم میخواست یجوری عذرخواهیم رو بابت روزایی که باعث شدم زندگی برات سخت تر بشه نشون بدم و این جو سنگین بینمون رو یکم کمتر کنم و بخاطر همه‌ی اون روزا و رفتارای بچه گانم معذرت میخوام. امیدوارم اگه دلخوری ای هنوز توی دلت مونده، یروزی بتونی منو ببخشی. و اینکه اینکارم فقط از روی عذرخواهی و دوستانست نه اینکه بخوام نظرتو جلب کنم مثل کارای گذشتم و مسئولیتی بابت اینکار من نداری و لطفا ازت میخام از این فکرا نکنی. موفق باشی.
+                [متن دلخواه و پیام آشتی یا تولد شما در اینجا قرار می‌گیرد. این بخش آماده نوشته‌های قشنگ شماست!]
             </div>
 
             <div class="media-section">
@@ -520,7 +525,6 @@
                     }
                 };
 
-                // اگه عکس لود شد یا خطا داد، محتوا رو نمایش بده
                 img.onload = showContent;
                 img.onerror = showContent;
 
@@ -528,7 +532,6 @@
             });
         }
 
-        // به محض لود شدن ساختار صفحه، پیش‌بارگذاری شروع می‌شه
         window.addEventListener('load', preloadAllBackgrounds);
 
         // ----------------------------------------
