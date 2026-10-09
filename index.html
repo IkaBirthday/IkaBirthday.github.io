@@ -174,7 +174,7 @@
             transform: scale(1.2);
         }
 
-        /* دکمه‌های ۳ گانه (نخ، نامه، موزیک) */
+        /* دکمه‌های چندگانه (نخ، نامه، موزیک، ماه) */
         .icons-row {
             display: flex;
             gap: 15px;
@@ -194,14 +194,15 @@
             justify-content: center;
         }
 
+        /* تنظیمات اختصاصی آیکون‌ها برای صفحه دوم (pic3) - کوچک‌تر شده تا ۴ آیکون جا بشن */
         #scene-page-2 .icons-row {
-            gap: 10px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 6px;
         }
 
         #scene-page-2 .icon-btn {
-            font-size: 16px;
-            padding: 5px 8px;
+            font-size: 14px;
+            padding: 4px 6px;
         }
 
         .icon-btn:hover {
@@ -269,7 +270,7 @@
             justify-content: flex-start;
         }
 
-        /* پس‌زمینه‌های اختصاصی برای صفحات درباره من و نامه */
+        /* پس‌زمینه‌های اختصاصی برای صفحات */
         #about-page {
             background-image: url('pic8.jpg');
             background-size: cover;
@@ -284,6 +285,16 @@
             background-color: #2a1b40;
         }
 
+        /* صفحه جدید برای آیکون 🌝 */
+        #shy-page {
+            background-image: url('pic11.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #2a1b40;
+            justify-content: center;
+            align-items: center;
+        }
+
         .card-container {
             background: rgba(255, 255, 255, 0.95);
             color: #2c3e50;
@@ -292,7 +303,7 @@
             max-width: 500px;
             width: 100%;
             margin-top: 40px;
-            margin-bottom: 50px; /* فاصله از پایین صفحه برای جلوگیری از خروج از بک‌گراند */
+            margin-bottom: 50px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
         }
@@ -314,6 +325,7 @@
             align-items: center;
             gap: 5px;
             transition: 0.2s;
+            z-index: 10;
         }
 
         .back-btn:hover {
@@ -342,7 +354,7 @@
             padding: 15px;
             border-radius: 10px;
             border-left: 4px solid #ff4081;
-            margin-top: 20px; /* فاصله بین تیتر Special Message و کادر متن */
+            margin-top: 20px;
             margin-bottom: 20px;
             white-space: pre-wrap;
         }
@@ -352,7 +364,6 @@
             text-align: center;
         }
 
-        /* فاصله بین تیترهای Listen و Our Memories با محتوای زیرشون */
         .media-section h3 {
             margin-bottom: 15px; 
         }
@@ -409,6 +420,7 @@
                 <span class="icon-btn" onclick="openModal('modal-yarn')">🧶</span>
                 <span class="icon-btn" onclick="openModal('modal-letter')">✉️</span>
                 <span class="icon-btn" onclick="handleMusicClick()">🎶</span>
+                <span class="icon-btn" onclick="openModal('modal-shy')">🌝</span>
             </div>
         </div>
     </div>
@@ -446,6 +458,17 @@
         </div>
     </div>
 
+    <!-- مودال جدید برای آیکون ماه 🌝 -->
+    <div id="modal-shy" class="modal">
+        <div class="modal-content">
+            <p>I feel a bit shy, but can I show you something?🙂‍↕️</p>
+            <div class="modal-btns">
+                <button class="modal-btn btn-yes" onclick="closeModal('modal-shy'); goToPage('shy-page');">Yes</button>
+                <button class="modal-btn btn-no" onclick="closeModal('modal-shy')">Maybe later</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==========================================
          ۵. صفحه درباره گربه (ABOUT ME)
          ========================================== -->
@@ -463,7 +486,7 @@
                 <img src="pic4.jpg" alt="Ginger 1">
                 <img src="pic5.jpg" alt="Ginger 2">
                 <img src="pic6.jpg" alt="Ginger 3">
-                <img src="pic10.jpg" alt="Ginger 3">
+                <img src="pic10.jpg" alt="Ginger 4">
             </div>
         </div>
     </div>
@@ -493,6 +516,14 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۷. صفحه جدید (SHY PAGE) - برای آیکون 🌝
+         ========================================== -->
+    <div id="shy-page" class="page full-page">
+        <button class="back-btn" style="position: absolute; top: 20px; left: 20px;" onclick="goToPage('scene-page-2')">← Back</button>
+        <!-- پس‌زمینه این صفحه pic11.jpg است که در CSS تنظیم شده -->
+    </div>
+
     <!-- فایل صوتی موزیک تولد -->
     <audio id="bg-music" src="audio2.mp3" loop></audio>
 
@@ -508,7 +539,8 @@
             'scene-page-1':  'pic2.jpg',
             'scene-page-2':  'pic3.jpg',
             'about-page':    'pic8.jpg',
-            'letter-page':   'pic9.jpg'
+            'letter-page':   'pic9.jpg',
+            'shy-page':      'pic11.jpg' // اضافه شدن بک‌گراند صفحه جدید
         };
 
         function preloadAllBackgrounds() {
