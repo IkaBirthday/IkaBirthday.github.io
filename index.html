@@ -35,7 +35,7 @@
         left: 0;
         width: 100%;
         height: 100vh;
-        height: 100dvh;   /* روی موبایل با نوار آدرس هماهنگ می‌شود */
+        height: 100dvh;
         background-color: #14071f;
         overflow: hidden;
     }
@@ -45,7 +45,7 @@
     }
 
     /* ------------------------------------------
-       آدرس بک‌گراند هر صفحه (تنها منبع حقیقت)
+       بک‌گراند موبایل (پیش‌فرض)
        ------------------------------------------ */
     #login-page   { --bg-img: url('pic1.jpg'); }
     #scene-page-1 { --bg-img: url('pic2.jpg'); }
@@ -53,6 +53,18 @@
     #about-page   { --bg-img: url('pic8.jpg'); }
     #letter-page  { --bg-img: url('pic9.jpg'); }
     #shy-page     { --bg-img: url('pic11.jpg'); }
+
+    /* ------------------------------------------
+       بک‌گراند دسکتاپ (min-width: 768px)
+       ------------------------------------------ */
+    @media (min-width: 768px) {
+        #login-page   { --bg-img: url('pic12.jpg'); }
+        #scene-page-1 { --bg-img: url('pic13.jpg'); }
+        #scene-page-2 { --bg-img: url('pic14.jpg'); }
+        #about-page   { --bg-img: url('pic15.jpg'); }
+        #letter-page  { --bg-img: url('pic16.jpg'); }
+        #shy-page     { --bg-img: url('pic17.jpg'); }
+    }
 
     /* پس‌زمینه بلور شده پشت تصویر (پر کردن نوارهای خالی) */
     .scene-page::before {
@@ -69,10 +81,9 @@
 
     /* ==========================================
        استیج: کادری که دقیقاً نسبت تصویر را حفظ می‌کند
-       (اندازه‌اش با جاوااسکریپت محاسبه می‌شود)
        ========================================== */
     .stage {
-        --u: 3.6px;              /* ۱ واحد = ۱٪ عرض استیج (توسط JS ست می‌شود) */
+        --u: 3.6px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -92,14 +103,12 @@
         opacity: 1;
     }
 
-    /* لایه محتوا روی استیج */
     .stage-content {
         position: absolute;
         inset: 0;
         z-index: 1;
     }
 
-    /* انیمیشن ظاهر شدن محتوا */
     .page-content {
         opacity: 0;
         transition: opacity 0.35s ease-in;
@@ -199,7 +208,6 @@
         pointer-events: auto;
     }
 
-    /* --- صفحه گربه ۱ (pic2) --- */
     #scene-page-1 .board-overlay {
         width: 60%;
         bottom: 15%;
@@ -209,7 +217,6 @@
         padding: calc(var(--u) * 4.2) calc(var(--u) * 2.8);
     }
 
-    /* --- صفحه گربه ۲ (pic3) --- */
     #scene-page-2 .board-overlay {
         width: 45%;
         bottom: 8%;
@@ -232,7 +239,6 @@
         transform: scale(1.2);
     }
 
-    /* دکمه‌های چندگانه (نخ، نامه، موزیک، ماه) */
     .icons-row {
         display: flex;
         justify-content: center;
@@ -270,7 +276,7 @@
     }
 
     /* ==========================================
-       ۳. مودال‌ها (Popups)
+       ۳. مودال‌ها
        ========================================== */
     .modal {
         display: none;
@@ -324,7 +330,7 @@
     .btn-no  { background: #e0e0e0; color: #555; }
 
     /* ==========================================
-       ۴. صفحه‌های کامل (About Me & Letter)
+       ۴. صفحه‌های کامل
        ========================================== */
     .page.scroll-page {
         overflow-y: auto;
@@ -350,7 +356,23 @@
         position: relative;
     }
 
-    /* دکمه بازگشت */
+    /* بزرگ‌تر کردن کادر All About Ginger در دسکتاپ */
+    @media (min-width: 768px) {
+        #about-page .card-container {
+            max-width: 800px;
+            padding: 40px;
+        }
+        #about-page .card-container h2 {
+            font-size: 32px;
+        }
+        #about-page .card-container p {
+            font-size: 17px;
+        }
+        #about-page .gallery img {
+            height: 160px;
+        }
+    }
+
     .back-btn {
         background: #ff4081;
         color: white;
@@ -374,14 +396,12 @@
         transform: translateY(-2px);
     }
 
-    /* دکمه بازگشت داخل کارت */
     .card-container .back-btn {
         position: absolute;
         top: -20px;
         left: 20px;
     }
 
-    /* دکمه بازگشت شناور روی استیج */
     .floating-back {
         position: absolute;
         top: calc(16px + env(safe-area-inset-top, 0px));
@@ -429,9 +449,12 @@
         margin-bottom: 15px;
     }
 
+    /* ==========================================
+       عکس Birthday together به صورت مربع در همه جا
+       ========================================== */
     .couple-img {
         width: 100%;
-        max-height: 250px;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
         border-radius: 12px;
     }
@@ -441,9 +464,6 @@
         50%      { transform: translateY(-6px); }
     }
 
-    /* ==========================================
-       ریسپانسیو برای صفحات متنی روی دسکتاپ
-       ========================================== */
     @media (min-width: 700px) {
         .card-container {
             padding: 32px;
@@ -612,9 +632,9 @@
          ========================================== -->
     <script>
         /* ----------------------------------------
-           آدرس تصاویر پس‌زمینه
+           آدرس تصاویر پس‌زمینه موبایل
            ---------------------------------------- */
-        const BG_SOURCES = {
+        const BG_SOURCES_MOBILE = {
             'login-page':   'pic1.jpg',
             'scene-page-1': 'pic2.jpg',
             'scene-page-2': 'pic3.jpg',
@@ -623,8 +643,30 @@
             'shy-page':     'pic11.jpg'
         };
 
-        /* ابعاد واقعی هر تصویر (بعد از لود مشخص می‌شود) */
+        /* ----------------------------------------
+           آدرس تصاویر پس‌زمینه دسکتاپ
+           ---------------------------------------- */
+        const BG_SOURCES_DESKTOP = {
+            'login-page':   'pic12.jpg',
+            'scene-page-1': 'pic13.jpg',
+            'scene-page-2': 'pic14.jpg',
+            'about-page':   'pic15.jpg',
+            'letter-page':  'pic16.jpg',
+            'shy-page':     'pic17.jpg'
+        };
+
+        /* ابعاد واقعی هر تصویر */
         const imageSizes = {};
+
+        /* تشخیص دسکتاپ */
+        function isDesktop() {
+            return window.matchMedia('(min-width: 768px)').matches;
+        }
+
+        /* برگرداندن آدرس تصویر مناسب بر اساس اندازه صفحه */
+        function getBgSource(pageId) {
+            return isDesktop() ? BG_SOURCES_DESKTOP[pageId] : BG_SOURCES_MOBILE[pageId];
+        }
 
         /* ----------------------------------------
            گرفتن ابعاد طبیعی یک تصویر
@@ -639,7 +681,6 @@
                     });
                 };
                 img.onerror = function () {
-                    // اگر تصویر پیدا نشد، نسبت پیش‌فرض موبایل
                     resolve({ w: 9, h: 16 });
                 };
                 img.src = src;
@@ -647,8 +688,7 @@
         }
 
         /* ----------------------------------------
-           اندازه‌گیری و تنظیم «استیج» هر صفحه
-           نسبت تصویر حفظ می‌شود و کل تصویر دیده می‌شود
+           چیدمان استیج‌ها
            ---------------------------------------- */
         function layoutStages() {
             const activePage = document.querySelector('.page.active');
@@ -656,7 +696,6 @@
             let vw = window.innerWidth  || document.documentElement.clientWidth;
             let vh = window.innerHeight || document.documentElement.clientHeight;
 
-            // اندازه‌ی دقیق‌تر از خود صفحه فعال (شامل 100dvh)
             if (activePage && activePage.clientWidth > 0 && activePage.clientHeight > 0) {
                 vw = activePage.clientWidth;
                 vh = activePage.clientHeight;
@@ -674,43 +713,55 @@
                 stage.style.width  = w + 'px';
                 stage.style.height = h + 'px';
 
-                // ۱ واحد = ۱٪ عرض استیج  →  همه فونت‌ها و فاصله‌ها متناسب مقیاس می‌شوند
                 stage.style.setProperty('--u', (w / 100) + 'px');
             });
         }
 
         /* ----------------------------------------
-           ریسایز با تاخیر (debounce)
+           بارگذاری همه تصاویر بر اساس بریک‌پوینت فعلی
            ---------------------------------------- */
-        let resizeTimer = null;
-        function onResize() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(layoutStages, 80);
+        function loadAllImages() {
+            const pageIds = Object.keys(BG_SOURCES_MOBILE);
+            return Promise.all(pageIds.map(function (pageId) {
+                const src = getBgSource(pageId);
+                return loadImageSize(src).then(function (size) {
+                    imageSizes[pageId] = size;
+                    const page = document.getElementById(pageId);
+                    if (page) {
+                        page.classList.add('bg-ready');
+                        const content = page.querySelector('.page-content');
+                        if (content) content.classList.add('show-now');
+                    }
+                });
+            })).then(function () {
+                layoutStages();
+            });
         }
 
         /* ----------------------------------------
-           راه‌اندازی اولیه + پیش‌بارگذاری تصاویر
+           ریسایز با تاخیر + بررسی تغییر بریک‌پوینت
+           ---------------------------------------- */
+        let resizeTimer = null;
+        let lastIsDesktop = isDesktop();
+
+        function onResize() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                const nowDesktop = isDesktop();
+                if (nowDesktop !== lastIsDesktop) {
+                    lastIsDesktop = nowDesktop;
+                    loadAllImages(); // بارگذاری مجدد تصاویر متناسب با بریک‌پوینت جدید
+                } else {
+                    layoutStages();
+                }
+            }, 80);
+        }
+
+        /* ----------------------------------------
+           راه‌اندازی اولیه
            ---------------------------------------- */
         function initSite() {
-            Object.keys(BG_SOURCES).forEach(function (pageId) {
-                loadImageSize(BG_SOURCES[pageId]).then(function (size) {
-                    imageSizes[pageId] = size;
-
-                    const page = document.getElementById(pageId);
-                    if (!page) return;
-
-                    // نمایش استیج و محتوا همزمان با آماده شدن تصویر
-                    page.classList.add('bg-ready');
-
-                    const content = page.querySelector('.page-content');
-                    if (content) content.classList.add('show-now');
-
-                    layoutStages();
-                });
-            });
-
-            // چیدمان اولیه (با نسبت پیش‌فرض تا وقتی تصاویر لود شوند)
-            layoutStages();
+            loadAllImages();
 
             window.addEventListener('resize', onResize);
             window.addEventListener('orientationchange', function () {
@@ -724,7 +775,7 @@
         document.addEventListener('DOMContentLoaded', initSite);
 
         /* ----------------------------------------
-           بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
+           بررسی رمز ورود
            ---------------------------------------- */
         function checkPassword() {
             const input = document.getElementById('pass-input').value.trim().toLowerCase();
@@ -748,7 +799,6 @@
             });
             document.getElementById(pageId).classList.add('active');
 
-            // بعد از نمایش صفحه، استیج را دقیق اندازه‌گیری کن
             requestAnimationFrame(layoutStages);
         }
 
@@ -782,7 +832,7 @@
         }
 
         /* ----------------------------------------
-           بستن مودال با کلیک روی پس‌زمینه (اختیاری)
+           بستن مودال با کلیک روی پس‌زمینه
            ---------------------------------------- */
         document.querySelectorAll('.modal').forEach(function (modal) {
             modal.addEventListener('click', function (e) {
