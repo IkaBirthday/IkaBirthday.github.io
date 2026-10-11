@@ -1,426 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melika's Birthday</title>
-    <style>
-        /* ==========================================
-           تنظیمات کلی و استایل‌ها (CSS)
-           ========================================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Melika's Birthday</title>
+<style>
+    /* ==========================================
+       تنظیمات کلی
+       ========================================== */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #1a0b2e;
-            color: #fff;
-        }
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #14071f;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-        /* بخش‌های مختلف وب‌سایت */
-        .page {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+    /* ==========================================
+       صفحات
+       ========================================== */
+    .page {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;   /* روی موبایل با نوار آدرس هماهنگ می‌شود */
+        background-color: #14071f;
+        overflow: hidden;
+    }
 
-        .active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    .page.active {
+        display: block;
+    }
 
-        /* ==========================================
-           کلاس سراسری برای همزمانی لود محتوا با بک‌گراند
-           ========================================== */
-        .page-content {
-            opacity: 0;
-            transition: opacity 0.3s ease-in;
-        }
+    /* ------------------------------------------
+       آدرس بک‌گراند هر صفحه (تنها منبع حقیقت)
+       ------------------------------------------ */
+    #login-page   { --bg-img: url('pic1.jpg'); }
+    #scene-page-1 { --bg-img: url('pic2.jpg'); }
+    #scene-page-2 { --bg-img: url('pic3.jpg'); }
+    #about-page   { --bg-img: url('pic8.jpg'); }
+    #letter-page  { --bg-img: url('pic9.jpg'); }
+    #shy-page     { --bg-img: url('pic11.jpg'); }
 
-        .page-content.show-now {
-            opacity: 1;
-        }
+    /* پس‌زمینه بلور شده پشت تصویر (پر کردن نوارهای خالی) */
+    .scene-page::before {
+        content: "";
+        position: absolute;
+        inset: -40px;
+        background-image: var(--bg-img);
+        background-size: cover;
+        background-position: center;
+        filter: blur(28px) brightness(0.35) saturate(1.1);
+        z-index: 0;
+        pointer-events: none;
+    }
 
-        /* ------------------------------------------
-           ۱. استایل صفحه ورود (Password Page)
-           ------------------------------------------ */
-        #login-page {
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('pic1.jpg'); 
-            background-color: #1a0b2e;
-            text-align: center;
-        }
+    /* ==========================================
+       استیج: کادری که دقیقاً نسبت تصویر را حفظ می‌کند
+       (اندازه‌اش با جاوااسکریپت محاسبه می‌شود)
+       ========================================== */
+    .stage {
+        --u: 3.6px;              /* ۱ واحد = ۱٪ عرض استیج (توسط JS ست می‌شود) */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background-image: var(--bg-img);
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.35s ease-in;
+    }
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            max-width: 90%;
-            width: 350px;
-        }
+    .page.bg-ready .stage {
+        opacity: 1;
+    }
 
-        .login-card h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #f3e5f5;
-        }
+    /* لایه محتوا روی استیج */
+    .stage-content {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
 
-        .login-card input {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 25px;
-            outline: none;
-            font-size: 14px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+    /* انیمیشن ظاهر شدن محتوا */
+    .page-content {
+        opacity: 0;
+        transition: opacity 0.35s ease-in;
+    }
 
-        .login-card button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 25px;
-            background: #ab47bc;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    .page-content.show-now {
+        opacity: 1;
+    }
 
-        .login-card button:hover {
-            background: #8e24aa;
-        }
+    /* سایه تیره روی صفحه ورود */
+    #login-page .stage::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45));
+        z-index: 0;
+        pointer-events: none;
+    }
 
-        .error-msg {
-            color: #ff5252;
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
+    /* ==========================================
+       ۱. صفحه ورود
+       ========================================== */
+    .login-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 88%;
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        padding: calc(var(--u) * 8.3) calc(var(--u) * 11);
+        border-radius: calc(var(--u) * 5.5);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        text-align: center;
+    }
 
-        /* ------------------------------------------
-           ۲. استایل صفحه‌های گربه (Cat Pages)
-           ------------------------------------------ */
-        #scene-page-1 {
-            background-image: url('pic2.jpg'); 
-            background-color: #2a1b40;
-        }
+    .login-card h1 {
+        font-size: calc(var(--u) * 7.8);
+        margin-bottom: calc(var(--u) * 5.5);
+        color: #f3e5f5;
+        line-height: 1.2;
+    }
 
-        #scene-page-2 {
-            background-image: url('pic3.jpg'); 
-            background-color: #2a1b40;
-        }
+    .login-card input {
+        width: 100%;
+        padding: calc(var(--u) * 3.3) calc(var(--u) * 4.2);
+        border: none;
+        border-radius: calc(var(--u) * 6.9);
+        outline: none;
+        font-size: calc(var(--u) * 3.9);
+        margin-bottom: calc(var(--u) * 2.8);
+        text-align: center;
+        font-family: inherit;
+    }
 
-        /* کادر روی تابلوی دست گربه */
-        .board-overlay {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            max-width: 340px;
-            height: 25%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 15px 10px;
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 12px;
-            line-height: 1.3;
-            pointer-events: auto;
-        }
+    .login-card button {
+        width: 100%;
+        padding: calc(var(--u) * 2.8);
+        border: none;
+        border-radius: calc(var(--u) * 6.9);
+        background: #ab47bc;
+        color: #fff;
+        font-size: calc(var(--u) * 4.4);
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-family: inherit;
+    }
 
-        /* تنظیمات اختصاصی برای صفحه دوم (pic3) */
-        #scene-page-2 .board-overlay {
-            width: 45%;
-            max-width: 240px;
-            bottom: 8%;
-            height: 24%;
-            font-size: 10px;
-            padding: 8px 5px;
-            line-height: 1.2;
-        }
+    .login-card button:hover {
+        background: #8e24aa;
+    }
 
-        .gift-btn {
-            font-size: 24px;
-            cursor: pointer;
-            margin-top: 5px;
-            transition: transform 0.2s;
-            animation: bounce 1.5s infinite;
-        }
+    .error-msg {
+        color: #ff5252;
+        font-size: calc(var(--u) * 3.6);
+        margin-top: calc(var(--u) * 2.2);
+        display: none;
+    }
 
-        .gift-btn:hover {
-            transform: scale(1.2);
-        }
+    /* ==========================================
+       ۲. کادر روی تابلوی دست گربه
+       ========================================== */
+    .board-overlay {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #2c3e50;
+        font-weight: 600;
+        pointer-events: auto;
+    }
 
-        /* دکمه‌های چندگانه (نخ، نامه، موزیک، ماه) */
-        .icons-row {
-            display: flex;
-            gap: 15px;
-            margin-top: 8px;
-        }
+    /* --- صفحه گربه ۱ (pic2) --- */
+    #scene-page-1 .board-overlay {
+        width: 60%;
+        bottom: 15%;
+        height: 25%;
+        font-size: calc(var(--u) * 3.33);
+        line-height: 1.3;
+        padding: calc(var(--u) * 4.2) calc(var(--u) * 2.8);
+    }
 
-        .icon-btn {
-            font-size: 20px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 6px 10px;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s, background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    /* --- صفحه گربه ۲ (pic3) --- */
+    #scene-page-2 .board-overlay {
+        width: 45%;
+        bottom: 8%;
+        height: 24%;
+        font-size: calc(var(--u) * 2.78);
+        line-height: 1.2;
+        padding: calc(var(--u) * 2.2) calc(var(--u) * 1.4);
+    }
 
-        /* تنظیمات اختصاصی آیکون‌ها برای صفحه دوم (pic3) - کوچک‌تر شده تا ۴ آیکون جا بشن */
-        #scene-page-2 .icons-row {
-            gap: 8px;
-            margin-top: 6px;
-        }
+    .gift-btn {
+        font-size: calc(var(--u) * 6.7);
+        line-height: 1;
+        cursor: pointer;
+        margin-top: calc(var(--u) * 1.4);
+        transition: transform 0.2s;
+        animation: bounce 1.5s infinite;
+    }
 
-        #scene-page-2 .icon-btn {
-            font-size: 14px;
-            padding: 4px 6px;
-        }
+    .gift-btn:hover {
+        transform: scale(1.2);
+    }
 
-        .icon-btn:hover {
-            transform: scale(1.15);
-            background: #ffffff;
-        }
+    /* دکمه‌های چندگانه (نخ، نامه، موزیک، ماه) */
+    .icons-row {
+        display: flex;
+        justify-content: center;
+        gap: calc(var(--u) * 4.2);
+        margin-top: calc(var(--u) * 2.2);
+    }
 
-        /* ------------------------------------------
-           ۳. استایل مودال‌ها (Popups)
-           ------------------------------------------ */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 100;
-            align-items: center;
-            justify-content: center;
-        }
+    .icon-btn {
+        font-size: calc(var(--u) * 5.6);
+        line-height: 1;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.9);
+        padding: calc(var(--u) * 1.67) calc(var(--u) * 2.78);
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .modal-content {
-            background: #ffffff;
-            color: #333;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 85%;
-            width: 320px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
+    #scene-page-2 .icons-row {
+        gap: calc(var(--u) * 2.22);
+        margin-top: calc(var(--u) * 1.67);
+    }
 
-        .modal-content p {
-            font-size: 15px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
+    #scene-page-2 .icon-btn {
+        font-size: calc(var(--u) * 3.89);
+        padding: calc(var(--u) * 1.11) calc(var(--u) * 1.67);
+    }
 
-        .modal-btns {
-            display: flex;
-            justify-content: space-around;
-        }
+    .icon-btn:hover {
+        transform: scale(1.15);
+        background: #ffffff;
+    }
 
-        .modal-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    /* ==========================================
+       ۳. مودال‌ها (Popups)
+       ========================================== */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+    }
 
-        .btn-yes { background: #4caf50; color: white; }
-        .btn-no { background: #e0e0e0; color: #555; }
+    .modal-content {
+        background: #ffffff;
+        color: #333;
+        padding: 25px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 340px;
+        width: 100%;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
 
-        /* ------------------------------------------
-           ۴. صفحه‌های کامل (About Me & Letter)
-           ------------------------------------------ */
-        .full-page {
-            background: #2a1b40;
-            overflow-y: auto;
-            padding: 30px 20px;
-            align-items: center;
-            justify-content: flex-start;
-        }
+    .modal-content p {
+        font-size: 15px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        line-height: 1.5;
+    }
 
-        /* پس‌زمینه‌های اختصاصی برای صفحات */
-        #about-page {
-            background-image: url('pic8.jpg');
-            background-size: cover;
-            background-position: center;
-            background-color: #2a1b40;
-        }
+    .modal-btns {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+    }
 
-        #letter-page {
-            background-image: url('pic9.jpg');
-            background-size: cover;
-            background-position: center;
-            background-color: #2a1b40;
-        }
+    .modal-btn {
+        padding: 9px 20px;
+        border: none;
+        border-radius: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+    }
 
-        /* صفحه جدید برای آیکون 🌝 */
-        #shy-page {
-            background-image: url('pic11.jpg');
-            background-size: cover;
-            background-position: center;
-            background-color: #2a1b40;
-            justify-content: center;
-            align-items: center;
-        }
+    .btn-yes { background: #4caf50; color: white; }
+    .btn-no  { background: #e0e0e0; color: #555; }
 
+    /* ==========================================
+       ۴. صفحه‌های کامل (About Me & Letter)
+       ========================================== */
+    .page.scroll-page {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding: 55px 16px 60px;
+        background-image: var(--bg-img);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #2a1b40;
+    }
+
+    .card-container {
+        background: rgba(255, 255, 255, 0.96);
+        color: #2c3e50;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 520px;
+        width: 100%;
+        margin: 10px auto 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        position: relative;
+    }
+
+    /* دکمه بازگشت */
+    .back-btn {
+        background: #ff4081;
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: background 0.2s, transform 0.2s;
+        font-family: inherit;
+        font-size: 14px;
+        z-index: 10;
+    }
+
+    .back-btn:hover {
+        background: #e91e63;
+        transform: translateY(-2px);
+    }
+
+    /* دکمه بازگشت داخل کارت */
+    .card-container .back-btn {
+        position: absolute;
+        top: -20px;
+        left: 20px;
+    }
+
+    /* دکمه بازگشت شناور روی استیج */
+    .floating-back {
+        position: absolute;
+        top: calc(16px + env(safe-area-inset-top, 0px));
+        left: calc(16px + env(safe-area-inset-left, 0px));
+        z-index: 10;
+    }
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .gallery img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .letter-text {
+        line-height: 1.8;
+        font-size: 14px;
+        background: #fdf6e3;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #ff4081;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+    }
+
+    .media-section {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .media-section h3 {
+        margin-bottom: 15px;
+    }
+
+    .media-section audio {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .couple-img {
+        width: 100%;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-6px); }
+    }
+
+    /* ==========================================
+       ریسپانسیو برای صفحات متنی روی دسکتاپ
+       ========================================== */
+    @media (min-width: 700px) {
         .card-container {
-            background: rgba(255, 255, 255, 0.95);
-            color: #2c3e50;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 500px;
-            width: 100%;
-            margin-top: 40px;
-            margin-bottom: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
+            padding: 32px;
         }
-
-        /* دکمه بازگشت شناور و جذاب */
-        .back-btn {
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            background: #ff4081;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
-            z-index: 10;
-        }
-
-        .back-btn:hover {
-            background: #e91e63;
-            transform: translateY(-2px);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .gallery img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .letter-text {
-            line-height: 1.6;
-            font-size: 14px;
-            background: #fdf6e3;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #ff4081;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
-
-        .media-section {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .media-section h3 {
-            margin-bottom: 15px; 
-        }
-
-        .media-section audio {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .couple-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-    </style>
+        .card-container h2 { font-size: 26px; }
+        .letter-text { font-size: 15px; }
+    }
+</style>
 </head>
 <body>
 
     <!-- ==========================================
          ۱. صفحه ورود (LOGIN)
          ========================================== -->
-    <div id="login-page" class="page active">
-        <div class="login-card page-content">
-            <h1>Welcome Melika</h1>
-            <input type="password" id="pass-input" placeholder="Enter the password...">
-            <button onclick="checkPassword()">Unlock</button>
-            <div id="error-msg" class="error-msg">Incorrect. Try again!</div>
+    <div id="login-page" class="page scene-page active">
+        <div class="stage">
+            <div class="stage-content page-content">
+                <div class="login-card">
+                    <h1>Welcome Melika</h1>
+                    <input type="password" id="pass-input" placeholder="Enter the password...">
+                    <button onclick="checkPassword()">Unlock</button>
+                    <div id="error-msg" class="error-msg">Incorrect. Try again!</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- ==========================================
          ۲. صفحه گربه ۱ (آشنایی)
          ========================================== -->
-    <div id="scene-page-1" class="page">
-        <div class="board-overlay page-content">
-            <p>Hi Melika! I'm Ginger and I'm so happy to meet you! 🐾<br>I have a surprise for you, click on the gift if you'd like to see it!</p>
-            <div class="gift-btn" onclick="goToPage('scene-page-2')">🎁</div>
+    <div id="scene-page-1" class="page scene-page">
+        <div class="stage">
+            <div class="stage-content page-content">
+                <div class="board-overlay">
+                    <p>Hi Melika! I'm Ginger and I'm so happy to meet you! 🐾<br>I have a surprise for you, click on the gift if you'd like to see it!</p>
+                    <div class="gift-btn" onclick="goToPage('scene-page-2')">🎁</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- ==========================================
          ۳. صفحه گربه ۲ (منوی آیکون‌ها)
          ========================================== -->
-    <div id="scene-page-2" class="page">
-        <div class="board-overlay page-content">
-            <p>I hope you liked it✨ But I'm not done with you yet <br>Pick one of the icons below:</p>
-            <div class="icons-row">
-                <span class="icon-btn" onclick="openModal('modal-yarn')">🧶</span>
-                <span class="icon-btn" onclick="openModal('modal-letter')">✉️</span>
-                <span class="icon-btn" onclick="handleMusicClick()">🎶</span>
-                <span class="icon-btn" onclick="openModal('modal-shy')">🌝</span>
+    <div id="scene-page-2" class="page scene-page">
+        <div class="stage">
+            <div class="stage-content page-content">
+                <div class="board-overlay">
+                    <p>I hope you liked it✨ But I'm not done with you yet <br>Pick one of the icons below:</p>
+                    <div class="icons-row">
+                        <span class="icon-btn" onclick="openModal('modal-yarn')">🧶</span>
+                        <span class="icon-btn" onclick="openModal('modal-letter')">✉️</span>
+                        <span class="icon-btn" onclick="handleMusicClick()">🎶</span>
+                        <span class="icon-btn" onclick="openModal('modal-shy')">🌝</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -450,7 +529,7 @@
 
     <div id="modal-music" class="modal">
         <div class="modal-content">
-            <p>Would you like me to play the Happy Birthday song for you? 🎵<br><small style="color: #777;">(Click the music icon again to stop it anytime)</small></p>
+            <p>Would you like me to play the Happy Birthday song for you? 🎵<br><small style="color:#777;">(Click the music icon again to stop it anytime)</small></p>
             <div class="modal-btns">
                 <button class="modal-btn btn-yes" onclick="playMusic()">Yes</button>
                 <button class="modal-btn btn-no" onclick="closeModal('modal-music')">Maybe later</button>
@@ -458,7 +537,6 @@
         </div>
     </div>
 
-    <!-- مودال جدید برای آیکون ماه 🌝 -->
     <div id="modal-shy" class="modal">
         <div class="modal-content">
             <p>I feel a bit shy, but can I show you something?🙂‍↕️</p>
@@ -472,12 +550,12 @@
     <!-- ==========================================
          ۵. صفحه درباره گربه (ABOUT ME)
          ========================================== -->
-    <div id="about-page" class="page full-page">
+    <div id="about-page" class="page scroll-page">
         <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
             <h2>All About Ginger! 🐱</h2>
-            <p style="margin: 15px 0; font-size: 14px; line-height: 1.5;">
-                Hello! I'm <strong>Ginger</strong>, a soft and fluffy British Shorthair kitten! 
+            <p style="margin: 15px 0; font-size: 14px; line-height: 1.7;">
+                Hello! I'm <strong>Ginger</strong>, a soft and fluffy British Shorthair kitten!
                 My favorite activities include sleeping on cozy desks, chasing mysterious red dots, eating delicious treats
                 and delivering special happy birthday messages to lovely humans like Melika!✨
             </p>
@@ -494,11 +572,11 @@
     <!-- ==========================================
          ۶. صفحه نامه و پیام دلخواه (LETTER PAGE)
          ========================================== -->
-    <div id="letter-page" class="page full-page">
+    <div id="letter-page" class="page scroll-page">
         <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
             <h2>Mehran to you ✉️</h2>
-            
+
             <div class="letter-text">
                 متن عذرخواهی و آشتی
             </div>
@@ -517,59 +595,137 @@
     </div>
 
     <!-- ==========================================
-         ۷. صفحه جدید (SHY PAGE) - برای آیکون 🌝
+         ۷. صفحه جدید (SHY PAGE)
          ========================================== -->
-    <div id="shy-page" class="page full-page">
-        <button class="back-btn" style="position: absolute; top: 20px; left: 20px;" onclick="goToPage('scene-page-2')">← Back</button>
-        <!-- پس‌زمینه این صفحه pic11.jpg است که در CSS تنظیم شده -->
+    <div id="shy-page" class="page scene-page">
+        <div class="stage">
+            <div class="stage-content page-content"></div>
+        </div>
+        <button class="back-btn floating-back" onclick="goToPage('scene-page-2')">← Back</button>
     </div>
 
     <!-- فایل صوتی موزیک تولد -->
     <audio id="bg-music" src="audio2.mp3" loop></audio>
 
     <!-- ==========================================
-         کدهای منطقی وب‌سایت (JAVASCRIPT)
+         کدهای منطقی (JAVASCRIPT)
          ========================================== -->
     <script>
-        // ----------------------------------------
-        // پیش‌بارگذاری بک‌گراند همه صفحات و نمایش همزمان محتوا با عکس
-        // ----------------------------------------
-        const pageBackgrounds = {
-            'login-page':    'pic1.jpg',
-            'scene-page-1':  'pic2.jpg',
-            'scene-page-2':  'pic3.jpg',
-            'about-page':    'pic8.jpg',
-            'letter-page':   'pic9.jpg',
-            'shy-page':      'pic11.jpg' // اضافه شدن بک‌گراند صفحه جدید
+        /* ----------------------------------------
+           آدرس تصاویر پس‌زمینه
+           ---------------------------------------- */
+        const BG_SOURCES = {
+            'login-page':   'pic1.jpg',
+            'scene-page-1': 'pic2.jpg',
+            'scene-page-2': 'pic3.jpg',
+            'about-page':   'pic8.jpg',
+            'letter-page':  'pic9.jpg',
+            'shy-page':     'pic11.jpg'
         };
 
-        function preloadAllBackgrounds() {
-            Object.entries(pageBackgrounds).forEach(function(entry) {
-                const pageId = entry[0];
-                const bgUrl = entry[1];
+        /* ابعاد واقعی هر تصویر (بعد از لود مشخص می‌شود) */
+        const imageSizes = {};
 
+        /* ----------------------------------------
+           گرفتن ابعاد طبیعی یک تصویر
+           ---------------------------------------- */
+        function loadImageSize(src) {
+            return new Promise(function (resolve) {
                 const img = new Image();
-
-                const showContent = function() {
-                    const page = document.getElementById(pageId);
-                    if (page) {
-                        const content = page.querySelector('.page-content');
-                        if (content) content.classList.add('show-now');
-                    }
+                img.onload = function () {
+                    resolve({
+                        w: img.naturalWidth  || 9,
+                        h: img.naturalHeight || 16
+                    });
                 };
-
-                img.onload = showContent;
-                img.onerror = showContent;
-
-                img.src = bgUrl;
+                img.onerror = function () {
+                    // اگر تصویر پیدا نشد، نسبت پیش‌فرض موبایل
+                    resolve({ w: 9, h: 16 });
+                };
+                img.src = src;
             });
         }
 
-        window.addEventListener('load', preloadAllBackgrounds);
+        /* ----------------------------------------
+           اندازه‌گیری و تنظیم «استیج» هر صفحه
+           نسبت تصویر حفظ می‌شود و کل تصویر دیده می‌شود
+           ---------------------------------------- */
+        function layoutStages() {
+            const activePage = document.querySelector('.page.active');
 
-        // ----------------------------------------
-        // بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
-        // ----------------------------------------
+            let vw = window.innerWidth  || document.documentElement.clientWidth;
+            let vh = window.innerHeight || document.documentElement.clientHeight;
+
+            // اندازه‌ی دقیق‌تر از خود صفحه فعال (شامل 100dvh)
+            if (activePage && activePage.clientWidth > 0 && activePage.clientHeight > 0) {
+                vw = activePage.clientWidth;
+                vh = activePage.clientHeight;
+            }
+
+            document.querySelectorAll('.stage').forEach(function (stage) {
+                const page = stage.closest('.page');
+                const size = imageSizes[page.id];
+                if (!size) return;
+
+                const scale = Math.min(vw / size.w, vh / size.h);
+                const w = Math.max(1, Math.floor(size.w * scale));
+                const h = Math.max(1, Math.floor(size.h * scale));
+
+                stage.style.width  = w + 'px';
+                stage.style.height = h + 'px';
+
+                // ۱ واحد = ۱٪ عرض استیج  →  همه فونت‌ها و فاصله‌ها متناسب مقیاس می‌شوند
+                stage.style.setProperty('--u', (w / 100) + 'px');
+            });
+        }
+
+        /* ----------------------------------------
+           ریسایز با تاخیر (debounce)
+           ---------------------------------------- */
+        let resizeTimer = null;
+        function onResize() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(layoutStages, 80);
+        }
+
+        /* ----------------------------------------
+           راه‌اندازی اولیه + پیش‌بارگذاری تصاویر
+           ---------------------------------------- */
+        function initSite() {
+            Object.keys(BG_SOURCES).forEach(function (pageId) {
+                loadImageSize(BG_SOURCES[pageId]).then(function (size) {
+                    imageSizes[pageId] = size;
+
+                    const page = document.getElementById(pageId);
+                    if (!page) return;
+
+                    // نمایش استیج و محتوا همزمان با آماده شدن تصویر
+                    page.classList.add('bg-ready');
+
+                    const content = page.querySelector('.page-content');
+                    if (content) content.classList.add('show-now');
+
+                    layoutStages();
+                });
+            });
+
+            // چیدمان اولیه (با نسبت پیش‌فرض تا وقتی تصاویر لود شوند)
+            layoutStages();
+
+            window.addEventListener('resize', onResize);
+            window.addEventListener('orientationchange', function () {
+                setTimeout(layoutStages, 250);
+            });
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', onResize);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSite);
+
+        /* ----------------------------------------
+           بررسی رمز ورود (غیرحساس به حروف بزرگ و کوچک)
+           ---------------------------------------- */
         function checkPassword() {
             const input = document.getElementById('pass-input').value.trim().toLowerCase();
             const correctPass = "some_things_stay";
@@ -583,19 +739,22 @@
             }
         }
 
-        // ----------------------------------------
-        // تغییر صفحه‌ها
-        // ----------------------------------------
+        /* ----------------------------------------
+           تغییر صفحه‌ها
+           ---------------------------------------- */
         function goToPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
+            document.querySelectorAll('.page').forEach(function (page) {
                 page.classList.remove('active');
             });
             document.getElementById(pageId).classList.add('active');
+
+            // بعد از نمایش صفحه، استیج را دقیق اندازه‌گیری کن
+            requestAnimationFrame(layoutStages);
         }
 
-        // ----------------------------------------
-        // مدیریت مودال‌ها (پاپ‌آپ‌ها)
-        // ----------------------------------------
+        /* ----------------------------------------
+           مدیریت مودال‌ها
+           ---------------------------------------- */
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
         }
@@ -604,9 +763,9 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // ----------------------------------------
-        // مدیریت پخش موزیک
-        // ----------------------------------------
+        /* ----------------------------------------
+           مدیریت پخش موزیک
+           ---------------------------------------- */
         const music = document.getElementById('bg-music');
 
         function handleMusicClick() {
@@ -621,6 +780,15 @@
             music.play();
             closeModal('modal-music');
         }
+
+        /* ----------------------------------------
+           بستن مودال با کلیک روی پس‌زمینه (اختیاری)
+           ---------------------------------------- */
+        document.querySelectorAll('.modal').forEach(function (modal) {
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) modal.style.display = 'none';
+            });
+        });
     </script>
 </body>
 </html>
