@@ -66,7 +66,7 @@
         #shy-page     { --bg-img: url('pic17.jpg'); }
     }
 
-    /* پس‌زمینه بلور شده پشت تصویر (پر کردن نوارهای خالی) */
+    /* پس‌زمینه بلور شده پشت تصویر */
     .scene-page::before {
         content: "";
         position: absolute;
@@ -80,7 +80,7 @@
     }
 
     /* ==========================================
-       استیج: کادری که دقیقاً نسبت تصویر را حفظ می‌کند
+       استیج
        ========================================== */
     .stage {
         --u: 3.6px;
@@ -118,7 +118,6 @@
         opacity: 1;
     }
 
-    /* سایه تیره روی صفحه ورود */
     #login-page .stage::after {
         content: "";
         position: absolute;
@@ -129,7 +128,7 @@
     }
 
     /* ==========================================
-       ۱. صفحه ورود
+       ۱. صفحه ورود (موبایل)
        ========================================== */
     .login-card {
         position: absolute;
@@ -192,7 +191,7 @@
     }
 
     /* ==========================================
-       ۲. کادر روی تابلوی دست گربه
+       ۲. کادر روی تابلوی دست گربه (موبایل)
        ========================================== */
     .board-overlay {
         position: absolute;
@@ -356,23 +355,6 @@
         position: relative;
     }
 
-    /* بزرگ‌تر کردن کادر All About Ginger در دسکتاپ */
-    @media (min-width: 768px) {
-        #about-page .card-container {
-            max-width: 800px;
-            padding: 40px;
-        }
-        #about-page .card-container h2 {
-            font-size: 32px;
-        }
-        #about-page .card-container p {
-            font-size: 17px;
-        }
-        #about-page .gallery img {
-            height: 160px;
-        }
-    }
-
     .back-btn {
         background: #ff4081;
         color: white;
@@ -464,12 +446,77 @@
         50%      { transform: translateY(-6px); }
     }
 
-    @media (min-width: 700px) {
-        .card-container {
-            padding: 32px;
+    /* ==========================================
+       دسکتاپ: تنظیمات اختصاصی نسخه مانیتور
+       ========================================== */
+    @media (min-width: 768px) {
+
+        /* --- کادر ورود: کوچک‌تر در دسکتاپ --- */
+        .login-card {
+            width: min(380px, 85%);
+            padding: 30px 32px;
+            border-radius: 20px;
         }
-        .card-container h2 { font-size: 26px; }
-        .letter-text { font-size: 15px; }
+        .login-card h1 {
+            font-size: 26px;
+            margin-bottom: 18px;
+        }
+        .login-card input {
+            padding: 12px 16px;
+            border-radius: 24px;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .login-card button {
+            padding: 12px;
+            border-radius: 24px;
+            font-size: 16px;
+        }
+        .error-msg {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* --- صفحه گربه ۱: متن و آیکون هدیه کوچک‌تر --- */
+        #scene-page-1 .board-overlay {
+            font-size: calc(var(--u) * 1.9);
+            padding: calc(var(--u) * 1.2) calc(var(--u) * 1);
+            line-height: 1.35;
+        }
+        #scene-page-1 .gift-btn {
+            font-size: calc(var(--u) * 3.5);
+            margin-top: calc(var(--u) * 0.5);
+        }
+
+        /* --- صفحه گربه ۲: متن و آیکون‌ها کوچک‌تر --- */
+        #scene-page-2 .board-overlay {
+            font-size: calc(var(--u) * 1.5);
+            padding: calc(var(--u) * 0.9) calc(var(--u) * 0.7);
+            line-height: 1.3;
+        }
+        #scene-page-2 .icons-row {
+            gap: calc(var(--u) * 1.4);
+            margin-top: calc(var(--u) * 0.8);
+        }
+        #scene-page-2 .icon-btn {
+            font-size: calc(var(--u) * 1.8);
+            padding: calc(var(--u) * 0.55) calc(var(--u) * 0.85);
+        }
+
+        /* --- کادر All About Ginger: بزرگ‌تر در دسکتاپ --- */
+        #about-page .card-container {
+            max-width: 800px;
+            padding: 40px;
+        }
+        #about-page .card-container h2 {
+            font-size: 32px;
+        }
+        #about-page .card-container p {
+            font-size: 17px;
+        }
+        #about-page .gallery img {
+            height: 160px;
+        }
     }
 </style>
 </head>
@@ -525,7 +572,7 @@
     </div>
 
     <!-- ==========================================
-         ۴. مودال‌ها (پاپ‌آپ‌ها)
+         ۴. مودال‌ها
          ========================================== -->
     <div id="modal-yarn" class="modal">
         <div class="modal-content">
@@ -590,7 +637,7 @@
     </div>
 
     <!-- ==========================================
-         ۶. صفحه نامه و پیام دلخواه (LETTER PAGE)
+         ۶. صفحه نامه (LETTER PAGE)
          ========================================== -->
     <div id="letter-page" class="page scroll-page">
         <div class="card-container page-content">
@@ -615,7 +662,7 @@
     </div>
 
     <!-- ==========================================
-         ۷. صفحه جدید (SHY PAGE)
+         ۷. صفحه SHY
          ========================================== -->
     <div id="shy-page" class="page scene-page">
         <div class="stage">
@@ -628,12 +675,9 @@
     <audio id="bg-music" src="audio2.mp3" loop></audio>
 
     <!-- ==========================================
-         کدهای منطقی (JAVASCRIPT)
+         JAVASCRIPT
          ========================================== -->
     <script>
-        /* ----------------------------------------
-           آدرس تصاویر پس‌زمینه موبایل
-           ---------------------------------------- */
         const BG_SOURCES_MOBILE = {
             'login-page':   'pic1.jpg',
             'scene-page-1': 'pic2.jpg',
@@ -643,9 +687,6 @@
             'shy-page':     'pic11.jpg'
         };
 
-        /* ----------------------------------------
-           آدرس تصاویر پس‌زمینه دسکتاپ
-           ---------------------------------------- */
         const BG_SOURCES_DESKTOP = {
             'login-page':   'pic12.jpg',
             'scene-page-1': 'pic13.jpg',
@@ -655,22 +696,16 @@
             'shy-page':     'pic17.jpg'
         };
 
-        /* ابعاد واقعی هر تصویر */
         const imageSizes = {};
 
-        /* تشخیص دسکتاپ */
         function isDesktop() {
             return window.matchMedia('(min-width: 768px)').matches;
         }
 
-        /* برگرداندن آدرس تصویر مناسب بر اساس اندازه صفحه */
         function getBgSource(pageId) {
             return isDesktop() ? BG_SOURCES_DESKTOP[pageId] : BG_SOURCES_MOBILE[pageId];
         }
 
-        /* ----------------------------------------
-           گرفتن ابعاد طبیعی یک تصویر
-           ---------------------------------------- */
         function loadImageSize(src) {
             return new Promise(function (resolve) {
                 const img = new Image();
@@ -687,9 +722,6 @@
             });
         }
 
-        /* ----------------------------------------
-           چیدمان استیج‌ها
-           ---------------------------------------- */
         function layoutStages() {
             const activePage = document.querySelector('.page.active');
 
@@ -717,9 +749,6 @@
             });
         }
 
-        /* ----------------------------------------
-           بارگذاری همه تصاویر بر اساس بریک‌پوینت فعلی
-           ---------------------------------------- */
         function loadAllImages() {
             const pageIds = Object.keys(BG_SOURCES_MOBILE);
             return Promise.all(pageIds.map(function (pageId) {
@@ -738,9 +767,6 @@
             });
         }
 
-        /* ----------------------------------------
-           ریسایز با تاخیر + بررسی تغییر بریک‌پوینت
-           ---------------------------------------- */
         let resizeTimer = null;
         let lastIsDesktop = isDesktop();
 
@@ -750,16 +776,13 @@
                 const nowDesktop = isDesktop();
                 if (nowDesktop !== lastIsDesktop) {
                     lastIsDesktop = nowDesktop;
-                    loadAllImages(); // بارگذاری مجدد تصاویر متناسب با بریک‌پوینت جدید
+                    loadAllImages();
                 } else {
                     layoutStages();
                 }
             }, 80);
         }
 
-        /* ----------------------------------------
-           راه‌اندازی اولیه
-           ---------------------------------------- */
         function initSite() {
             loadAllImages();
 
@@ -774,9 +797,6 @@
 
         document.addEventListener('DOMContentLoaded', initSite);
 
-        /* ----------------------------------------
-           بررسی رمز ورود
-           ---------------------------------------- */
         function checkPassword() {
             const input = document.getElementById('pass-input').value.trim().toLowerCase();
             const correctPass = "some_things_stay";
@@ -790,9 +810,6 @@
             }
         }
 
-        /* ----------------------------------------
-           تغییر صفحه‌ها
-           ---------------------------------------- */
         function goToPage(pageId) {
             document.querySelectorAll('.page').forEach(function (page) {
                 page.classList.remove('active');
@@ -802,9 +819,6 @@
             requestAnimationFrame(layoutStages);
         }
 
-        /* ----------------------------------------
-           مدیریت مودال‌ها
-           ---------------------------------------- */
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
         }
@@ -813,9 +827,6 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        /* ----------------------------------------
-           مدیریت پخش موزیک
-           ---------------------------------------- */
         const music = document.getElementById('bg-music');
 
         function handleMusicClick() {
@@ -831,9 +842,6 @@
             closeModal('modal-music');
         }
 
-        /* ----------------------------------------
-           بستن مودال با کلیک روی پس‌زمینه
-           ---------------------------------------- */
         document.querySelectorAll('.modal').forEach(function (modal) {
             modal.addEventListener('click', function (e) {
                 if (e.target === modal) modal.style.display = 'none';
