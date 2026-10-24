@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Melika's Birthday</title>
 <style>
+    /* ==========================================
+       تنظیمات کلی
+       ========================================== */
     * {
         box-sizing: border-box;
         margin: 0;
@@ -22,6 +25,9 @@
         -webkit-tap-highlight-color: transparent;
     }
 
+    /* ==========================================
+       صفحات
+       ========================================== */
     .page {
         display: none;
         position: fixed;
@@ -38,6 +44,9 @@
         display: block;
     }
 
+    /* ------------------------------------------
+       بک‌گراند موبایل (پیش‌فرض)
+       ------------------------------------------ */
     #login-page   { --bg-img: url('pic1.jpg'); }
     #scene-page-1 { --bg-img: url('pic2.jpg'); }
     #scene-page-2 { --bg-img: url('pic3.jpg'); }
@@ -45,6 +54,9 @@
     #letter-page  { --bg-img: url('pic9.jpg'); }
     #shy-page     { --bg-img: url('pic11.jpg'); }
 
+    /* ------------------------------------------
+       بک‌گراند دسکتاپ (min-width: 768px)
+       ------------------------------------------ */
     @media (min-width: 768px) {
         #login-page   { --bg-img: url('pic12.jpg'); }
         #scene-page-1 { --bg-img: url('pic13.jpg'); }
@@ -54,6 +66,7 @@
         #shy-page     { --bg-img: url('pic17.jpg'); }
     }
 
+    /* پس‌زمینه بلور شده پشت تصویر */
     .scene-page::before {
         content: "";
         position: absolute;
@@ -66,6 +79,9 @@
         pointer-events: none;
     }
 
+    /* ==========================================
+       استیج
+       ========================================== */
     .stage {
         --u: 3.6px;
         position: absolute;
@@ -111,6 +127,9 @@
         pointer-events: none;
     }
 
+    /* ==========================================
+       ۱. صفحه ورود (موبایل)
+       ========================================== */
     .login-card {
         position: absolute;
         top: 50%;
@@ -171,6 +190,9 @@
         display: none;
     }
 
+    /* ==========================================
+       ۲. کادر روی تابلوی دست گربه (موبایل)
+       ========================================== */
     .board-overlay {
         position: absolute;
         left: 50%;
@@ -252,6 +274,9 @@
         background: #ffffff;
     }
 
+    /* ==========================================
+       ۳. مودال‌ها
+       ========================================== */
     .modal {
         display: none;
         position: fixed;
@@ -303,6 +328,9 @@
     .btn-yes { background: #4caf50; color: white; }
     .btn-no  { background: #e0e0e0; color: #555; }
 
+    /* ==========================================
+       ۴. صفحه‌های کامل
+       ========================================== */
     .page.scroll-page {
         overflow-y: auto;
         overflow-x: hidden;
@@ -403,19 +431,17 @@
         margin-bottom: 15px;
     }
 
-    .couple-img {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        border-radius: 12px;
-    }
-
     @keyframes bounce {
         0%, 100% { transform: translateY(0); }
         50%      { transform: translateY(-6px); }
     }
 
+    /* ==========================================
+       دسکتاپ: تنظیمات اختصاصی نسخه مانیتور
+       ========================================== */
     @media (min-width: 768px) {
+
+        /* --- کادر ورود: کوچک‌تر در دسکتاپ --- */
         .login-card {
             width: min(380px, 85%);
             padding: 30px 32px;
@@ -441,32 +467,33 @@
             margin-top: 8px;
         }
 
+        /* --- صفحه گربه ۱: متن و آیکون هدیه کوچک‌تر --- */
         #scene-page-1 .board-overlay {
-            font-size: calc(var(--u) * 1);
-            padding: calc(var(--u) * 0.8) calc(var(--u) * 0.6);
+            font-size: calc(var(--u) * 1.9);
+            padding: calc(var(--u) * 1.2) calc(var(--u) * 1);
             line-height: 1.35;
-            width: 17%;
         }
         #scene-page-1 .gift-btn {
-            font-size: calc(var(--u) * 2);
+            font-size: calc(var(--u) * 3.5);
             margin-top: calc(var(--u) * 0.5);
         }
 
+        /* --- صفحه گربه ۲: متن و آیکون‌ها کوچک‌تر --- */
         #scene-page-2 .board-overlay {
-            font-size: calc(var(--u) * 1);
-            padding: calc(var(--u) * 0.7) calc(var(--u) * 0.5);
+            font-size: calc(var(--u) * 1.5);
+            padding: calc(var(--u) * 0.9) calc(var(--u) * 0.7);
             line-height: 1.3;
-            width: 15%;
         }
         #scene-page-2 .icons-row {
-            gap: calc(var(--u) * 0.4);
+            gap: calc(var(--u) * 1.4);
             margin-top: calc(var(--u) * 0.8);
         }
         #scene-page-2 .icon-btn {
-            font-size: calc(var(--u) * 1);
+            font-size: calc(var(--u) * 1.8);
             padding: calc(var(--u) * 0.55) calc(var(--u) * 0.85);
         }
 
+        /* --- کادر All About Ginger: بزرگ‌تر در دسکتاپ --- */
         #about-page .card-container {
             max-width: 800px;
             padding: 40px;
@@ -485,6 +512,9 @@
 </head>
 <body>
 
+    <!-- ==========================================
+         ۱. صفحه ورود (LOGIN)
+         ========================================== -->
     <div id="login-page" class="page scene-page active">
         <div class="stage">
             <div class="stage-content page-content">
@@ -498,6 +528,9 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۲. صفحه گربه ۱ (آشنایی)
+         ========================================== -->
     <div id="scene-page-1" class="page scene-page">
         <div class="stage">
             <div class="stage-content page-content">
@@ -509,6 +542,9 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۳. صفحه گربه ۲ (منوی آیکون‌ها)
+         ========================================== -->
     <div id="scene-page-2" class="page scene-page">
         <div class="stage">
             <div class="stage-content page-content">
@@ -525,6 +561,9 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۴. مودال‌ها
+         ========================================== -->
     <div id="modal-yarn" class="modal">
         <div class="modal-content">
             <p>This part is about me! Would you like to know more about me? 🐾</p>
@@ -565,6 +604,9 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۵. صفحه درباره گربه (ABOUT ME)
+         ========================================== -->
     <div id="about-page" class="page scroll-page">
         <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
@@ -584,13 +626,16 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         ۶. صفحه نامه (LETTER PAGE)
+         ========================================== -->
     <div id="letter-page" class="page scroll-page">
         <div class="card-container page-content">
             <button class="back-btn" onclick="goToPage('scene-page-2')">← Back</button>
             <h2>Mehran to you ✉️</h2>
 
             <div class="letter-text">
-                سلام ملیکا خوبی؟ تولدت مبارک امیدوارم سال خوبی پیش رو داشته باشی. مدت زیادیه که ارتباطی نداشتیم و گفتم تولدت فرصت خوبیه تا بابت گذشته ازت معذرت بخوام. میخواستم یجوری عذرخواهیم رو بابت روزایی که باعث شدم زندگی برات سخت تر بشه نشون بدم و این جو سنگین بینمون رو کمتر کنم و بخاطر همه‌ی اون روزا و رفتارای بچه گانم معذرت میخوام. امیدوارم بابت دلخوریای به وجود اومده یروزی بتونی منو ببخشی. و اینکه اینکارم فقط از روی عذرخواهی و دوستانست نه اینکه بخوام مثل گذشته نظرتو جلب کنم و مسئولیتی بابت اینکار من نداری و ازت میخام از این فکرا نکنی. برات آرزوی بهترینا رو دارم‌
+                متن عذرخواهی و آشتی
             </div>
 
             <div class="media-section">
@@ -599,13 +644,14 @@
                     <source src="audio1.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
-
-                <h3>Birthday together 📸</h3>
-                <img src="pic7.jpg" class="couple-img" alt="Together">
+                <!-- بخش عکس دو نفره کاملاً حذف شد -->
             </div>
         </div>
     </div>
 
+    <!-- ==========================================
+         ۷. صفحه SHY
+         ========================================== -->
     <div id="shy-page" class="page scene-page">
         <div class="stage">
             <div class="stage-content page-content"></div>
@@ -613,8 +659,12 @@
         <button class="back-btn floating-back" onclick="goToPage('scene-page-2')">← Back</button>
     </div>
 
+    <!-- فایل صوتی موزیک تولد -->
     <audio id="bg-music" src="audio2.mp3" loop></audio>
 
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
     <script>
         const BG_SOURCES_MOBILE = {
             'login-page':   'pic1.jpg',
@@ -737,13 +787,8 @@
 
         function checkPassword() {
             const input = document.getElementById('pass-input').value.trim().toLowerCase();
+            const correctPass = "some_things_stay";
             const errorMsg = document.getElementById('error-msg');
-            const encoded = "2935373f052e3233343d2905292e3b23";
-            let correctPass = "";
-
-            for (let i = 0; i < encoded.length; i += 2) {
-                correctPass += String.fromCharCode(parseInt(encoded.slice(i, i + 2), 16) ^ 0x5A);
-            }
 
             if (input === correctPass) {
                 errorMsg.style.display = 'none';
